@@ -10,7 +10,7 @@
 
 <body>
     <div id="pageTitle">
-        <h1 class="container">Cookie Editor</h1>
+        <h1 class="container">Cookie Editor - Enhanced By Ham Tru Van</h1>
 
         <div id="advanced-toggle-all">
             <label>
@@ -19,6 +19,14 @@
             </label>
         </div>
     </div>
+
+    <div class="panel-section-footer-button" id="load-cookie">
+        <div>
+            <svg class="icon"><use xlink:href="../sprites/solid.svg#cookie"></use></svg>
+            <div class="tooltip">Load Cookie For This Site</div>
+        </div>
+    </div>
+    
     <div id="cookie-container"></div>
 
     <div class="panel button-bar active" id="button-bar-default">
@@ -240,6 +248,13 @@
             This page does not have any cookies
         </p>
     </template>
+
+    <template id="tmp-empty-without-text">
+        <p class="container" id="no-cookies-with-text">
+           
+        </p>
+    </template>
+    
 </body>
 
 </html>

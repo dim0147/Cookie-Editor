@@ -1,6 +1,9 @@
 (function () {
     'use strict';
 
+    // My custom
+    let isLoading = false;
+
     let containerCookie;
     let cookiesListHtml;
     let pageTitleContainer;
@@ -390,23 +393,33 @@
             hideNotification();
         });
 
-        initWindow();
-        showCookiesForTab();
-        adjustWidthIfSmaller();
+        // My Custom
+        document.getElementById('load-cookie').addEventListener('click', e => {
+            isLoading = true;
+            initWindow();
+            showCookiesForTab();
+            adjustWidthIfSmaller();
+    
+    
+            if (chrome && chrome.runtime && chrome.runtime.getBrowserInfo) {
+                chrome.runtime.getBrowserInfo(function (info) {
+                    const mainVersion = info.version.split('.')[0];
+                    if (mainVersion < 57) {
+                        containerCookie.style.height = '600px';
+                    }
+                });
+            }
 
-        if (chrome && chrome.runtime && chrome.runtime.getBrowserInfo) {
-            chrome.runtime.getBrowserInfo(function (info) {
-                const mainVersion = info.version.split('.')[0];
-                if (mainVersion < 57) {
-                    containerCookie.style.height = '600px';
-                }
-            });
-        }
+            const el = document.getElementById('load-cookie');
+            el.remove();
+        });
+
     });
 
     // == End document ready == //
 
     function showCookiesForTab() {
+
         if (!cookieHandler.currentTab) {
             return;
         }
@@ -435,13 +448,27 @@
         if (subtitleLine) {
             subtitleLine.textContent = domain || cookieHandler.currentTab.url;
         }
-        
+
+         // My custom
+         if(!isLoading){
+            setPageTitle('Cookie Editor - Enhanced By Ham Tru Van');
+            document.getElementById('button-bar-add').classList.remove('active');
+            document.getElementById('button-bar-import').classList.remove('active');
+            document.getElementById('button-bar-convert-to-json').classList.remove('active');
+            document.getElementById('button-bar-default').classList.add('active');
+
+            showNoCookies(false);
+            
+            return;
+        }            
+
         cookieHandler.getAllCookies(function (cookies) {
+
             cookies = cookies.sort(sortCookiesByName);
 
             loadedCookies = {};
 
-            setPageTitle('Cookie Editor');
+            setPageTitle('Cookie Editor - Enhanced By Ham Tru Van');
 
             document.getElementById('button-bar-add').classList.remove('active');
             document.getElementById('button-bar-import').classList.remove('active');
@@ -470,12 +497,13 @@
         });
     }
 
-    function showNoCookies() {
+    // My custom
+    function showNoCookies(showText = true) {
         if (disableButtons) {
             return;
         }
         cookiesListHtml = null;
-        let html = document.importNode(document.getElementById('tmp-empty').content, true).querySelector('p');
+        let html = document.importNode(document.getElementById(showText ? 'tmp-empty' : 'tmp-empty-without-text').content, true).querySelector('p');
         if (containerCookie.firstChild) {
             if (containerCookie.firstChild.id === 'no-cookie') {
                 return;
