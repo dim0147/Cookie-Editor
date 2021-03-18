@@ -19,4 +19,6 @@ referer=example.com/post?id=22;bcomID=8075; subreturn=example&fuzzy=true&ct=null
 ```
 + Enter this string to convert to json data use for import cookie
 
+**LICENSE**
 
+https://github.com/Moustachauve/cookie-editor/blob/master/LICENSE
